@@ -1,0 +1,21 @@
+name: Create Release Tag
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v2
+
+    - name: Create release tag
+      run: |
+        TAG=rel-$(date +'%Y%m%d%H%M%S')
+        git tag $TAG
+        git push origin $TAG
+
