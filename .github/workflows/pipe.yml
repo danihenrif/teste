@@ -13,9 +13,17 @@ jobs:
     - name: Check out repository
       uses: actions/checkout@v2
 
-    - name: Create release tag
+    - name: Tag the rel
+      id: tag
       run: |
-        TAG=rel-$(date +'%Y%m%d%H%M%S')
-        git tag $TAG
-        git push origin $TAG
+        TIMESTAMP=$(date +%Y%m%d%H%M%S)
+        TAG_NAME="rel-${TIMESTAMP}"
+        echo "TAG_NAME=${TAG_NAME}" >> $GITHUB_ENV
+
+    - name: Create tag
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        git tag ${{ env.TAG_NAME }}
+        git push origin ${{ env.TAG_NAME }}
 
